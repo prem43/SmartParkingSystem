@@ -1,0 +1,35 @@
+﻿@model SmartParkingSystem.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="video-container">
+    <video autoplay loop muted>
+        <source src="~/videos/homepage.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card glass-effect p-4" style="max-width: 400px; width: 100%;">
+        <h3 class="text-center mb-4">Login</h3>
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+
+            <p class="text-center mt-3">Don't have an account? <a asp-action="Register">Sign Up</a></p>
+        </form>
+    </div>
+</div>

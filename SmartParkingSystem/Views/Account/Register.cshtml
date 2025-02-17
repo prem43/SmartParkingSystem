@@ -1,0 +1,52 @@
+﻿@model SmartParkingSystem.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="video-container">
+    <video autoplay loop muted>
+        <source src="~/videos/homepage.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card glass-effect p-4" style="max-width: 400px; width: 100%;">
+        <h3 class="text-center mb-4">Create Account</h3>
+
+        <form asp-action="Register" method="post">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input asp-for="FirstName" class="form-control" placeholder="Enter your full name">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input asp-for="LastName" class="form-control" placeholder="Enter your full name">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+
+            <p class="text-center mt-3">Already have an account? <a asp-action="Login">Login</a></p>
+        </form>
+    </div>
+</div>

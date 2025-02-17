@@ -1,0 +1,26 @@
+﻿@model List<ParkingLotsDTO>
+@{
+    ViewData["Title"] = "Parking Slots";
+}
+
+<div class="container">
+    <a asp-action="Create" method="Get" class="btn btn-success">Add New Parking Lot</a>
+
+    <h2 class="my-4">Parking Slots</h2>
+    <div class="row">
+        <!-- Loop through parking lots and display slots dynamically -->
+        @foreach (var parking in Model)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@parking.Name</h5>
+                        <p>@parking.Location</p>
+                        <p>Price: $@parking.Price</p>
+                        <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Book", "Parking", new { id = parking.LotID })'">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-container">
+    <div class="sidebar">
+        <h3>Dashboard</h3>
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+            <li><a asp-action="Logout" asp-controller="Account"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h2>Welcome, User!</h2>
+        <p>This is your dashboard with amazing UI.</p>
+    </div>
+</div>
