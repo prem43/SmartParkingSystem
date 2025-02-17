@@ -3,7 +3,15 @@
 @{
     ViewData["Title"] = "Register";
 }
+<style>
+    select {
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
 
+</style>
 <div class="video-container">
     <video autoplay loop muted>
         <source src="~/videos/homepage.mp4" type="video/mp4">
@@ -37,6 +45,18 @@
                 <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label class="form-label">Select Role:</label>
+                <select asp-for="Role" class="form-control">
+                    <option value="Admin">Admin</option>
+                    <option value="Customer">Customer</option>  <!-- Changed "User" to "Customer" -->
+                    <option value="Owner">Owner</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+
+            
 
             <div class="mb-3">
                 <label class="form-label">Confirm Password</label>

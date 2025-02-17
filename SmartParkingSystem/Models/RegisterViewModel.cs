@@ -17,9 +17,8 @@ namespace SmartParkingSystem.Models
         [Required]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-        
-        [Required]
-        public string Role { get; set; } // Admin, Owner, Customer
+
+        public string Role { get; set; }  // Ensure this property exists
         public DateTime CreatedAt { get; internal set; }
         public DateTime UpdatedAt { get; internal set; }
         public int UserID { get; internal set; }

@@ -4,6 +4,8 @@ namespace SmartParkingSystem.Repositories.IRepositories
 {
     public interface IAuthenticationRepository
     {
-       RegisterViewModel register(RegisterViewModel user);
+        ApplicationUser AuthenticateUser(string email, string password);
+        //ApplicationUser? AuthenticateUser(string email, string password);
+        RegisterViewModel register(RegisterViewModel user);
     }
 }

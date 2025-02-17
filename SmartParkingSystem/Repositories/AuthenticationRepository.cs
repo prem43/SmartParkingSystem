@@ -17,6 +17,37 @@ namespace SmartParkingSystem.Repositories
         {
             _databaseHelper = databaseHelper;
         }
+        public ApplicationUser AuthenticateUser(string email, string password)
+        {
+            using IDbConnection db = _databaseHelper.GetConnection;
+
+            string query = "SELECT * FROM Users WHERE Email = @email";
+            var user = db.QueryFirstOrDefault<ApplicationUser>(query, new { Email = email });
+
+            if (user == null || !this.VerifyPasswords(password, user.PasswordHash))
+            {
+                return null; // Invalid login
+            }
+
+
+            return user;
+        }
+
+        private bool VerifyPasswords(string enteredPassword, string storedPassword)
+        {
+            var parts = storedPassword.Split(':');
+            var salt = Convert.FromBase64String(parts[0]);
+            var hashedPassword = Convert.FromBase64String(parts[1]);
+
+            var enteredHash = KeyDerivation.Pbkdf2(
+                password: enteredPassword,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 32);
+
+            return enteredHash.SequenceEqual(hashedPassword);
+        }
 
         public RegisterViewModel register(RegisterViewModel user)
         {
@@ -81,5 +112,10 @@ namespace SmartParkingSystem.Repositories
 
             return enteredHash == parts[1];
         }
+
+        //ApplicationUser? IAuthenticationRepository.AuthenticateUser(string email, string password)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

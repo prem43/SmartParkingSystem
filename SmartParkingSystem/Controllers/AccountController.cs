@@ -47,14 +47,23 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-
-        if (result.Succeeded)
+        var user = _authenticationService.LoginAsyncall(model.Email, model.Password);
+        if (user != null)
+        {
             return RedirectToAction("Dashboard", "Home");
+        }
 
         ModelState.AddModelError("", "Invalid login attempt");
         return View(model);
     }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _authenticationService.LogoutAsync();
+        return RedirectToAction("Login", "Account");
+    }
+
+
 
     // Register GET
     [HttpGet]
@@ -64,13 +73,8 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        model.Role = "Admin";
-        //if (!ModelState.IsValid)
-        //    return View(model);
-
-        // Create a new user
-        //var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FirstName + model.LastName, Role = model.Role };
-        //var result = await _userManager.CreateAsync(user, model.Password);
+        
+        
 
 
         if (ModelState.IsValid)
@@ -89,9 +93,9 @@ public class AccountController : Controller
     }
 
     // Logout GET
-    public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        return RedirectToAction("Login");
-    }
+    //public async Task<IActionResult> Logout()
+    //{
+    //    await _signInManager.SignOutAsync();
+    //    return RedirectToAction("Login");
+    //}
 }

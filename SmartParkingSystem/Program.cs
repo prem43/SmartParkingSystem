@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using SmartParkingSystem.Infrastructure;
 using SmartParkingSystem.Models;
@@ -13,40 +14,65 @@ var builder = WebApplication.CreateBuilder(args);
 // ✅ Configure DatabaseHelper as a Singleton Service
 builder.Services.AddSingleton<DatabaseHelper>();
 
-// ✅ Add Repository and Service Layer
+// ✅ Register Repositories
 builder.Services.AddScoped<IRepository<ApplicationUser>, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IParkingLotsRepository, ParkingLotsRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+// ✅ Register Services
 builder.Services.AddScoped<IService<ApplicationUser>, UserService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IParkingLotsService, ParkingLotsService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDatabaseHelper, DatabaseHelper>();
 
-// Identity Configuration (Without Entity Framework)
+// ✅ Add IHttpContextAccessor for authentication handling
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// ✅ Identity Configuration (Without Entity Framework)
 builder.Services.AddScoped<IUserStore<ApplicationUser>, UserStore>();
 builder.Services.AddScoped<IRoleStore<IdentityRole>, RoleStore>();
 
-// Configure Identity with UserManager, SignInManager, etc.
+// ✅ Configure Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddUserStore<UserStore>()
     .AddRoleStore<RoleStore>()
     .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-});
+// ✅ Configure Authentication using Cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.SlidingExpiration = true;
+    });
 
+// ✅ Add MVC Support
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// ✅ Enable error handling in development mode
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+// ✅ Ensure Static Files are Served Correctly
+app.UseStaticFiles();
+
+// ✅ Routing Middleware
+app.UseRouting();
+
+// ✅ Authentication & Authorization Middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
+// ✅ Configure Routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
